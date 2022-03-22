@@ -33,6 +33,7 @@ def configure(config_paras: dict, app):
         username_min_len=int(config_paras["general"]["username_min_len"]),
         password_min_len=int(config_paras["general"]["password_min_len"]),
         adcfg=ad_cfg,
+        avatar_folder = config_paras["avatar_folder"]
     )
     cfg.bind(db_cfg)
 
