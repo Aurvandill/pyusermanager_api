@@ -142,7 +142,7 @@ async def update_user_info(request, username):
 
         try:
             # create avatar file
-            with open(f"{app.ctx.folders['avatars']}/{username}", "wb") as avatarfile:
+            with open(f"{app.ctx.cfg.avatar_folder}/{username}", "wb") as avatarfile:
                 avatarfile.write(img_bytes)
 
             this_user.change(avatar=username)
