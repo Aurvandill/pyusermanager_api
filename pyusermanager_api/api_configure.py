@@ -39,3 +39,5 @@ def configure(config_paras: dict, app):
 
     # adding cfg to context
     app.ctx.cfg = cfg
+
+    app.ctx.AuthProvider = AuthProvider(cfg)
