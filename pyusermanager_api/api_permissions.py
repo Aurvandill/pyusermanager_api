@@ -1,4 +1,3 @@
-from . import api_misc
 from sws_webstuff import *
 
 from sanic import Sanic
@@ -11,7 +10,7 @@ from pyusermanager import Perm
 async def get_perms(request):
     app = request.app
 
-    success, found_username = await api_misc.is_logged_in(app, request.ctx.token, request.ctx.ip)
+    success, found_username = app.ctx.AuthProvider.is_logged_in(request.ctx.token, request.ctx.ip)
 
     if not success:
         return json(
@@ -23,7 +22,7 @@ async def get_perms(request):
         )
 
     # return users perms
-    if not await api_misc.is_in_group_by_name(app, found_username, app.ctx.cfg.admin_group_name):
+    if not app.ctx.AuthProvider.is_in_group_by_name(found_username, app.ctx.cfg.admin_group_name):
         return json(
             get_json_from_args(Alert(app.ctx.lang.perm_admin_error, ALERT_TYPE.WARNING), Redirect("/")),
             HTTPStatus.UNAUTHORIZED,
@@ -34,7 +33,7 @@ async def get_perms(request):
 
 async def change_perm(request, add):
     app = request.app
-    success, found_username = await api_misc.is_logged_in(app, request.ctx.token, request.ctx.ip)
+    success, found_username = app.ctx.AuthProvider.is_logged_in(request.ctx.token, request.ctx.ip)
 
     if not success:
         return json(
@@ -44,7 +43,7 @@ async def change_perm(request, add):
             )
         )
 
-    if not await api_misc.is_in_group_by_name(app, found_username, app.ctx.cfg.admin_group_name):
+    if not app.ctx.AuthProvider.is_in_group_by_name(found_username, app.ctx.cfg.admin_group_name):
         return json(get_json_from_args(Alert(app.ctx.lang.perm_admin_error, ALERT_TYPE.WARNING), Redirect("/")))
 
     try:

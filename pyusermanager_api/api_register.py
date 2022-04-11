@@ -24,11 +24,11 @@ async def register_user(request):
             status=HTTPStatus.FORBIDDEN,
         )
 
-    logged_in, found_username = await api_misc.is_logged_in(app, request.ctx.token, request.ctx.ip)
+    logged_in, found_username = app.ctx.AuthProvider.is_logged_in(request.ctx.token, request.ctx.ip)
 
     if logged_in:
         return json(
-            get_json_from_args(Alert(app.ctx.already_logged_in, ALERT_TYPE.WARNING), Redirect("/")),
+            get_json_from_args(Alert(app.ctx.lang.already_logged_in, ALERT_TYPE.WARNING), Redirect("/")),
             status=HTTPStatus.FORBIDDEN,
         )
 

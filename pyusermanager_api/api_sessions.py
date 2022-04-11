@@ -10,7 +10,7 @@ async def login_user(request):
 
     json_dict = request.json
 
-    logged_in, found_username = await is_logged_in(app, request.ctx.token, request.ctx.ip)
+    logged_in, found_username = app.ctx.AuthProvider.is_logged_in(request.ctx.token, request.ctx.ip)
 
     if logged_in:
         return json(
@@ -61,7 +61,7 @@ async def logout_user(request):
 
     app = request.app
 
-    if not await is_logged_in(app, request.ctx.token,request.ctx.ip):
+    if not app.ctx.AuthProvider.is_logged_in(request.ctx.token,request.ctx.ip):
         return json(
             get_json_from_args(Alert(app.ctx.lang.not_logged_in), Redirect("/login")),
             status=HTTPStatus.FORBIDDEN,
