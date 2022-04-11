@@ -27,6 +27,7 @@ async def get_users(request):
             HTTPStatus.UNAUTHORIZED,
         )
 
+
 async def get_user_info(request, username):
     app = request.app
 
@@ -56,6 +57,7 @@ async def get_user_info(request, username):
             HTTPStatus.BAD_REQUEST,
         )
 
+
 async def get_info_for_header(request):
     app = request.app
 
@@ -82,6 +84,7 @@ async def get_info_for_header(request):
 
     return json({"registration": app.ctx.cfg.public_registration}, HTTPStatus.UNAUTHORIZED)
 
+
 async def update_user_info(request, username):
     app = request.app
 
@@ -96,7 +99,10 @@ async def update_user_info(request, username):
     except Exception:
         return json(get_json_from_args(Alert(app.ctx.lang.user_missing, ALERT_TYPE.DANGER)))
 
-    if not (found_username == this_user.username or app.ctx.AuthProvider.is_in_group_by_name(found_username, app.ctx.cfg.admin_group_name)):
+    if not (
+        found_username == this_user.username
+        or app.ctx.AuthProvider.is_in_group_by_name(found_username, app.ctx.cfg.admin_group_name)
+    ):
         return json(get_json_from_args(Alert(app.ctx.lang.perm_misc_error, ALERT_TYPE.DANGER)), HTTPStatus.UNAUTHORIZED)
 
     json_dict = request.json
@@ -108,7 +114,10 @@ async def update_user_info(request, username):
     email = json_dict.get("email", None)
 
     if password != passwordconfirm:
-        return json(get_json_from_args(Alert(app.ctx.lang.parameter_password_confirm_error, ALERT_TYPE.DANGER)), HTTPStatus.BAD_REQUEST)
+        return json(
+            get_json_from_args(Alert(app.ctx.lang.parameter_password_confirm_error, ALERT_TYPE.DANGER)),
+            HTTPStatus.BAD_REQUEST,
+        )
 
     try:
         if password is not None:
@@ -118,7 +127,9 @@ async def update_user_info(request, username):
             this_user.change(email=email)
 
     except:
-        return json(get_json_from_args(Alert(app.ctx.lang.parameter_generic_error, ALERT_TYPE.DANGER)), HTTPStatus.BAD_REQUEST)
+        return json(
+            get_json_from_args(Alert(app.ctx.lang.parameter_generic_error, ALERT_TYPE.DANGER)), HTTPStatus.BAD_REQUEST
+        )
 
     if img_base64 is not None:
         img_bytes = a2b_base64(img_base64)
@@ -126,7 +137,7 @@ async def update_user_info(request, username):
         filetype = imghdr.what(None, h=img_bytes)
         if not (filetype == "gif" or filetype == "jpeg" or filetype == "png"):
             return json(
-                get_json_from_args(Alert(app.ctx.lang.file_invalid_type, ALERT_TYPE.DANGER), HTTPStatus.BAD_REQUEST)
+                get_json_from_args(Alert(app.ctx.lang.file_invalid_type, ALERT_TYPE.DANGER)), HTTPStatus.BAD_REQUEST
             )
 
         try:
@@ -137,9 +148,8 @@ async def update_user_info(request, username):
             this_user.change(avatar=username)
         except Exception:
             return json(
-                get_json_from_args(
-                    Alert(app.ctx.lang.avatar_set_error, ALERT_TYPE.DANGER), HTTPStatus.INTERNAL_SERVER_ERROR
-                )
+                get_json_from_args(Alert(app.ctx.lang.avatar_set_error, ALERT_TYPE.DANGER)),
+                HTTPStatus.INTERNAL_SERVER_ERROR,
             )
 
     # change perm stuff if user is admin
@@ -152,6 +162,7 @@ async def update_user_info(request, username):
             Perm(app.ctx.cfg, perm).perm_user(username, add)
 
     return json(get_json_from_args(Alert(app.ctx.lang.changes_success), Redirect(f"/user/{username}")))
+
 
 async def delete_user(request, username):
     app = request.app
@@ -189,6 +200,7 @@ async def delete_user(request, username):
 
     return returnvalue
 
+
 async def create_by_admin(request):
     app = request.app
 
@@ -213,8 +225,7 @@ async def create_by_admin(request):
             Perm(app.ctx.cfg, perm).perm_user(username, add)
 
         return json(
-            get_json_from_args(Alert(app.ctx.lang.user_create_success, ALERT_TYPE.SUCCESS)),
-            status=HTTPStatus.OK
+            get_json_from_args(Alert(app.ctx.lang.user_create_success, ALERT_TYPE.SUCCESS)), status=HTTPStatus.OK
         )
 
     except Exception as err:
@@ -223,5 +234,3 @@ async def create_by_admin(request):
             get_json_from_args(Alert(app.ctx.lang.user_create_error, ALERT_TYPE.DANGER)),
             status=HTTPStatus.BAD_REQUEST,
         )
-
-
