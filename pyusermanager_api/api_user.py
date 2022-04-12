@@ -218,7 +218,7 @@ async def create_by_admin(request):
         email = json_dict["email"]
         perms = json_dict["perms"]
 
-        api_misc.create_user(app, password, username, email)
+        await api_misc.create_user(app, password, username, email)
 
         for perm, add in perms.items():
             print(perm, add)
