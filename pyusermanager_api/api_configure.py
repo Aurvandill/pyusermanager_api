@@ -27,7 +27,7 @@ def configure(config_paras: dict, app):
         auto_activate_accounts=config_paras["general"].as_bool("auto_activate_accounts"),
         email_required=config_paras["general"].as_bool("email_required"),
         admin_group_name=config_paras["general"]["admin_group_name"],
-        public_registration=config_paras["general"].as_bool("auto_activate_accounts"),
+        public_registration=config_paras["general"].as_bool("public_registration"),
         allow_avatars=config_paras["general"].as_bool("allow_avatars"),
         password_reset_days_valid=int(config_paras["general"]["password_reset_days_valid"]),
         username_min_len=int(config_paras["general"]["username_min_len"]),
