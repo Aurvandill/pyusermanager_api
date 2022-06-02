@@ -2,6 +2,10 @@ This Project implements api routes for the pyusermanager
 
 # Changelog
 
+## v0.0.6
+
+* min lenght for groups is now 1 char
+
 ## v0.0.3
 
 * implements changes from pyusermanager v2.0.7

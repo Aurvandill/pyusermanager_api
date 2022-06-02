@@ -48,7 +48,7 @@ async def change_perm(request, add):
 
     try:
         perm_name = request.json["perm"]
-        if len(perm_name) < 4 or perm_name == app.ctx.cfg.admin_group_name:
+        if len(perm_name) < 1 or perm_name == app.ctx.cfg.admin_group_name:
             raise Exception()
     except Exception:
         return json(get_json_from_args(Alert(app.ctx.lang.parameter_error, ALERT_TYPE.DANGER)))
