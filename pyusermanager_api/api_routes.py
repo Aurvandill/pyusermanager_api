@@ -9,25 +9,25 @@ from . import api_user
 
 def RegisterRoutes(route_prefix = "/", app = None):
     
-    app.add_route(api_user.get_info_for_header, f"{route_prefix}header", methods=["GET"])
+    app.add_route(api_user.get_info_for_header, f"{route_prefix}header", methods=["GET"], name="userapi.header")
 
     # login/logout/register routes
-    app.add_route(api_sessions.login_user, f"{route_prefix}login", methods=["POST"])
-    app.add_route(api_sessions.logout_user, f"{route_prefix}logout", methods=["GET"])
-    app.add_route(api_register.register_user, f"{route_prefix}register", methods=["POST"])
+    app.add_route(api_sessions.login_user, f"{route_prefix}login", methods=["POST"], name="userapi.login")
+    app.add_route(api_sessions.logout_user, f"{route_prefix}logout", methods=["GET"], name="userapi.logout")
+    app.add_route(api_register.register_user, f"{route_prefix}register", methods=["POST"], name="userapi.register")
 
     # to get versions of stuff
-    app.add_route(api_misc.version, f"/version/userapi", methods=["GET"])
+    app.add_route(api_misc.version, f"/version/userapi", methods=["GET"], name="userapi.version")
 
 
     # Route to get useravatar
-    app.add_route(api_misc.get_avatar, f"{route_prefix}avatar/<avatarname>", methods=["GET"])
+    app.add_route(api_misc.get_avatar, f"{route_prefix}avatar/<avatarname>", methods=["GET"], name="userapi.avatar")
 
     # Methods Regarding Users
-    app.add_route(api_user.create_by_admin, f"{route_prefix}admin/create", methods=["POST"])
-    app.add_route(api_user.get_users, f"{route_prefix}users", methods=["GET"])
+    app.add_route(api_user.create_by_admin, f"{route_prefix}admin/create", methods=["POST"], name="userapi.admin_create")
+    app.add_route(api_user.get_users, f"{route_prefix}users", methods=["GET"], name="userapi.users")
     
-    @app.route(f"{route_prefix}perms", methods=["GET", "POST", "DELETE"])
+    @app.route(f"{route_prefix}perms", methods=["GET", "POST", "DELETE"], name="userapi.permissions")
     async def handle_rest_perm(request):
 
         if request.method == "GET":
@@ -39,7 +39,7 @@ def RegisterRoutes(route_prefix = "/", app = None):
         else:
             pass
 
-    @app.route(f"{route_prefix}user/<username>", methods=["GET", "PUT", "DELETE"])
+    @app.route(f"{route_prefix}user/<username>", methods=["GET", "PUT", "DELETE"], name="userapi.user")
     async def handle_rest_user(request, username):
 
         if request.method == "GET":
